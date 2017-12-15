@@ -42,8 +42,11 @@ for subdir,dirs,files in os.walk(fpath):
         except:
             print("Unable to merge file " + str(name))
 """
+#uncomment below for windows
+#df_raw = pd.read_csv(fpath+"\\"+filein,header=None,names=cols)
+#uncomment below for linux
+df_raw = pd.read_csv(fpath+"/"+filein,header=None,names=cols)
 
-df_raw = pd.read_csv(fpath+"\\"+filein,header=None,names=cols)
 df_raw['datetime'] = pd.to_datetime(df_raw['datetime'],unit='s')
 
 df = df_raw[df_raw['lat'].astype(str) != 'NOFIX']
@@ -95,7 +98,7 @@ df['rd'] = df['r'] * rEarth
 df['angle'] = np.arctan2(df['dy'],df['dx'])
 df['angle'] = df['angle'] + math.pi
 df['angle_deg'] = df['angle'].map(lambda x : math.degrees(x))
-df = df.sort(['angle'])
+df = df.sort_values(by='angle')
 
 df['dy_m'] = np.sin(df['angle']) * df['rd']
 df['dx_m'] = np.cos(df['angle']) * df['rd']
@@ -148,7 +151,10 @@ axes = plt.gca()
 #axes.set_xticks([0,45,90,135,180,225,270,315,360])
 #plt.colorbar(sc)
 plt.title('GPS CEP',fontsize=24,weight='bold')
-plt.savefig(fpath+"\\"+outplot+".png",dpi=300)
+#uncomment below for windows
+#plt.savefig(fpath+"\\"+outplot+".png",dpi=300)
+#uncomment below for linux
+plt.savefig(fpath+"/"+outplot+".png",dpi=300)
 
 #df.to_csv(fpath+"\\"+outplot+"_wifi_df.csv")
 
