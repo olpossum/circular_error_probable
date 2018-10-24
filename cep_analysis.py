@@ -47,7 +47,11 @@ for subdir,dirs,files in os.walk(fpath):
 #uncomment below for linux
 df_raw = pd.read_csv(fpath+"/"+filein,header=None,names=cols)
 
-df_raw['datetime'] = pd.to_datetime(df_raw['datetime'],unit='s')
+try:
+    df_raw['datetime'] = pd.to_datetime(df_raw['datetime'],unit='s')
+except:
+    df_raw['datetime'] = pd.to_datetime(df_raw['datetime'])
+   
 
 df = df_raw[df_raw['lat'].astype(str) != 'NOFIX']
 df[['lat','lng','alt']] = df[['lat','lng','alt']].apply(pd.to_numeric, errors='coerce')
